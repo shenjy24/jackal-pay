@@ -4,13 +4,6 @@ server:
 spring:
   application:
     name: "pay-server"
-  jpa:
-    hibernate:
-      ddl-auto: update   # 会自动创建或更新表
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
   datasource:
     url: jdbc:mysql://8.134.206.112:3306/pay?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Hongkong&allowPublicKeyRetrieval=true
     username: jia
