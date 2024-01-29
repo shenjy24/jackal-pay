@@ -1,45 +1,48 @@
 package com.jonas.pay.config.response;
 
+import lombok.Getter;
+
 /**
  * 业务错误码
  *
  * @author shenjy
  * @time 2020/8/13
  */
+@Getter
 public enum ErrorCode {
     /**
      * 通用异常
      */
-    PARAM_ERROR(100001, "参数异常"),
-    UPDATE_ERROR(100002,"更新异常"),
+    NOT_IMPLEMENTED(100001, "功能未实现/未开启"),
 
-    /**
-     * 用户模块
-     */
-    USER_ERROR1(200001, "用户名重复"),
-    USER_ERROR2(200002, "手机号重复"),
-    USER_ERROR3(200003, "用户不存在"),
-    /**
-     * 店铺模块
-     */
-    SHOP_ERROR1(300001, "店铺名重复"),
-    SHOP_ERROR2(300002, "店铺申请不存在"),
-    SHOP_ERROR3(300003, "申请状态异常"),
-    SHOP_ERROR4(300004, "当前非审核中状态"),
-    SHOP_ERROR5(300005, "店铺不存在"),
+    // ========== 支付宝错误段 ==========
+    ALIPAY_ERROR1(200001, "支付宝单笔转账必须使用公钥证书模式"),
+    ALIPAY_ERROR2(200002, "不正确的转账类型"),
+    ALIPAY_ERROR3(200003, "条形码不能为空"),
 
-    /**
-     * 商品模块
-     */
-    PRODUCT_ERROR1(400001, "商品分组名不能为空"),
-    PRODUCT_ERROR2(400002, "商品分组不存在"),
-    PRODUCT_ERROR3(400003, "商品不存在"),
-    PRODUCT_ERROR4(400004, "商品状态异常"),
+    // ========== 微信支付错误段 ==========
+    WECHAT_PAY_ERROR1(300001, "支付请求的 authCode 不能为空！"),
+    WECHAT_PAY_ERROR2(300002, "支付请求的 openid 不能为空！"),
 
-    /**
-     * 订单模块
-     */
-    ORDER_ERROR1(500001, "订单状态异常");
+    // ========== 客户端错误段 ==========
+
+    BAD_REQUEST(400, "请求参数不正确"),
+    UNAUTHORIZED(401, "账号未登录"),
+    FORBIDDEN(403, "没有该操作权限"),
+    NOT_FOUND(404, "请求未找到"),
+    METHOD_NOT_ALLOWED(405, "请求方法不正确"),
+    LOCKED(423, "请求失败，请稍后重试"), // 并发请求，不允许
+    TOO_MANY_REQUESTS(429, "请求过于频繁，请稍后重试"),
+
+    // ========== 服务端错误段 ==========
+
+    INTERNAL_SERVER_ERROR(500, "系统异常"),
+    ERROR_CONFIGURATION(502, "错误的配置项"),
+
+    // ========== 自定义错误段 ==========
+    REPEATED_REQUESTS(900, "重复请求，请稍后重试"), // 重复请求
+    DEMO_DENY(901, "演示模式，禁止写操作"),
+    UNKNOWN(999, "未知错误");
 
     private final Integer code;
     private final String message;
@@ -49,11 +52,4 @@ public enum ErrorCode {
         this.message = message;
     }
 
-    public Integer getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }
