@@ -2,6 +2,7 @@ package com.jonas.pay.repository.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.jonas.pay.constant.CommonStatusEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -27,7 +28,7 @@ public class PayAppEntity extends BaseEntity {
     private String name;
     /**
      * 状态
-     * 枚举 {@link com.jonas.pay.constant.YesNoEnum}
+     * 枚举 {@link CommonStatusEnum}
      */
     private Integer status;
     /**

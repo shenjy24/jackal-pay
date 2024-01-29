@@ -1,5 +1,6 @@
 package com.jonas.pay.constant.channel;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.jonas.pay.channel.NonePayClientConfig;
 import com.jonas.pay.channel.PayClientConfig;
 import com.jonas.pay.channel.alipay.AlipayPayClientConfig;
@@ -59,12 +60,7 @@ public enum PayChannelEnum {
     public static final String ALIPAY = "ALIPAY";
 
     public static PayChannelEnum getByCode(String code) {
-        for (PayChannelEnum payChannelEnum : values()) {
-            if (payChannelEnum.getCode().equals(code)) {
-                return payChannelEnum;
-            }
-        }
-        return null;
+        return ArrayUtil.firstMatch(o -> o.getCode().equals(code), values());
     }
 
     public static boolean isAlipay(String channelCode) {

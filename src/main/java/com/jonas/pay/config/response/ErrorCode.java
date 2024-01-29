@@ -21,8 +21,12 @@ public enum ErrorCode {
     ALIPAY_ERROR3(200003, "条形码不能为空"),
 
     // ========== 微信支付错误段 ==========
-    WECHAT_PAY_ERROR1(300001, "支付请求的 authCode 不能为空！"),
-    WECHAT_PAY_ERROR2(300002, "支付请求的 openid 不能为空！"),
+    WECHAT_PAY_ERROR1(300001, "支付请求的 authCode 不能为空"),
+    WECHAT_PAY_ERROR2(300002, "支付请求的 openid 不能为空"),
+
+    // ========== 支付渠道错误段 ==========
+    CHANNEL_ERROR1(400001, "已存在相同的渠道"),
+    CHANNEL_ERROR2(400002, "支付渠道的配置不存在"),
 
     // ========== 客户端错误段 ==========
 

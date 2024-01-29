@@ -1,7 +1,12 @@
 package com.jonas.pay.repository.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.jonas.pay.channel.PayClientConfig;
+import com.jonas.pay.constant.CommonStatusEnum;
+import com.jonas.pay.constant.channel.PayChannelEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,8 +28,33 @@ public class PayChannelEntity extends BaseEntity {
     private Long id;
     /**
      * 渠道编码
-     *
+     * <p>
      * 枚举 {@link PayChannelEnum}
      */
     private String code;
+    /**
+     * 状态
+     * <p>
+     * 枚举 {@link CommonStatusEnum}
+     */
+    private Integer status;
+    /**
+     * 渠道费率，单位：百分比
+     */
+    private Double feeRate;
+    /**
+     * 备注
+     */
+    private String remark;
+    /**
+     * 应用编号
+     * <p>
+     * 关联 {@link PayAppEntity#getId()}
+     */
+    private Long appId;
+    /**
+     * 支付渠道配置
+     */
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private PayClientConfig config;
 }
