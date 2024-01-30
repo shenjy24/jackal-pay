@@ -14,7 +14,11 @@ import com.jonas.pay.util.GsonUtil;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * PayChannelService
@@ -40,7 +44,7 @@ public class PayChannelService {
         PayChannelEntity channel = PayChannelConvert.INSTANCE.convert(qo);
         channel.setConfig(parseConfig(qo.getCode(), qo.getConfig()));
         payChannelDomain.savePayChannel(channel);
-        return channel.getId();
+        return channel.getChannelId();
     }
 
     /**
@@ -62,5 +66,26 @@ public class PayChannelService {
         // 验证参数
         config.validate(validator);
         return config;
+    }
+
+    public PayChannelEntity getChannel(Long id) {
+        if (null == id) {
+            return null;
+        }
+        return payChannelDomain.getChannel(id);
+    }
+
+    public PayChannelEntity getChannelByAppIdAndCode(Long appId, String code) {
+        if (null == appId || StringUtils.isBlank(code)) {
+            return null;
+        }
+        return payChannelDomain.getChannelByAppIdAndCode(appId, code);
+    }
+
+    public List<PayChannelEntity> listByAppId(Long appId) {
+        if (null == appId) {
+            return Collections.emptyList();
+        }
+        return payChannelDomain.listByAppId(appId);
     }
 }

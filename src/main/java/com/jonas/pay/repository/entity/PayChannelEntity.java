@@ -25,7 +25,7 @@ public class PayChannelEntity extends BaseEntity {
      * 渠道编号
      */
     @TableId
-    private Long id;
+    private Long channelId;
     /**
      * 渠道编码
      * <p>
@@ -49,7 +49,7 @@ public class PayChannelEntity extends BaseEntity {
     /**
      * 应用编号
      * <p>
-     * 关联 {@link PayAppEntity#getId()}
+     * 关联 {@link PayAppEntity#getAppId()}
      */
     private Long appId;
     /**

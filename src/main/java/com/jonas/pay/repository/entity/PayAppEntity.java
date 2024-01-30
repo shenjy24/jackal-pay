@@ -21,7 +21,7 @@ public class PayAppEntity extends BaseEntity {
      * 应用编号
      */
     @TableId
-    private Long id;
+    private Long appId;
     /**
      * 应用名
      */

@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * PayChannelDomain
  *
@@ -30,5 +33,21 @@ public class PayChannelDomain {
 
     public void savePayChannel(PayChannelEntity channel) {
         payChannelMapper.insert(channel);
+    }
+
+    public PayChannelEntity getChannel(Long id) {
+        if (null == id) {
+            return null;
+        }
+        return payChannelMapper.selectById(id);
+    }
+
+    public List<PayChannelEntity> listByAppId(Long appId) {
+        if (null == appId) {
+            return Collections.emptyList();
+        }
+        return new LambdaQueryChainWrapper<>(payChannelMapper)
+                .eq(PayChannelEntity::getAppId, appId)
+                .list();
     }
 }
