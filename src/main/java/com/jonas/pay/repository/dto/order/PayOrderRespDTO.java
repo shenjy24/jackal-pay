@@ -1,7 +1,7 @@
 package com.jonas.pay.repository.dto.order;
 
 import com.jonas.pay.constant.order.PayOrderDisplayModeEnum;
-import com.jonas.pay.constant.order.PayOrderStatusRespEnum;
+import com.jonas.pay.constant.order.PayOrderStatusEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -17,7 +17,7 @@ public class PayOrderRespDTO {
     /**
      * 支付状态
      *
-     * 枚举：{@link PayOrderStatusRespEnum}
+     * 枚举：{@link PayOrderStatusEnum}
      */
     private Integer status;
 
@@ -80,7 +80,7 @@ public class PayOrderRespDTO {
     public static PayOrderRespDTO waitingOf(String displayMode, String displayContent,
                                             String outTradeNo, Object rawData) {
         PayOrderRespDTO respDTO = new PayOrderRespDTO();
-        respDTO.status = PayOrderStatusRespEnum.WAITING.getStatus();
+        respDTO.status = PayOrderStatusEnum.WAITING.getStatus();
         respDTO.displayMode = displayMode;
         respDTO.displayContent = displayContent;
         // 相对通用的字段
@@ -95,7 +95,7 @@ public class PayOrderRespDTO {
     public static PayOrderRespDTO successOf(String channelOrderNo, String channelUserId, LocalDateTime successTime,
                                             String outTradeNo, Object rawData) {
         PayOrderRespDTO respDTO = new PayOrderRespDTO();
-        respDTO.status = PayOrderStatusRespEnum.SUCCESS.getStatus();
+        respDTO.status = PayOrderStatusEnum.SUCCESS.getStatus();
         respDTO.channelOrderNo = channelOrderNo;
         respDTO.channelUserId = channelUserId;
         respDTO.successTime = successTime;
@@ -127,7 +127,7 @@ public class PayOrderRespDTO {
     public static PayOrderRespDTO closedOf(String channelErrorCode, String channelErrorMsg,
                                            String outTradeNo, Object rawData) {
         PayOrderRespDTO respDTO = new PayOrderRespDTO();
-        respDTO.status = PayOrderStatusRespEnum.CLOSED.getStatus();
+        respDTO.status = PayOrderStatusEnum.CLOSED.getStatus();
         respDTO.channelErrorCode = channelErrorCode;
         respDTO.channelErrorMsg = channelErrorMsg;
         // 相对通用的字段

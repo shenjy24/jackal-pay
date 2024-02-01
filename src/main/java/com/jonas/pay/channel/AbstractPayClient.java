@@ -3,6 +3,7 @@ package com.jonas.pay.channel;
 import com.jonas.pay.config.response.BizException;
 import com.jonas.pay.config.response.ErrorCode;
 import com.jonas.pay.constant.exception.PayException;
+import com.jonas.pay.constant.exception.ServiceException;
 import com.jonas.pay.constant.transfer.PayTransferTypeEnum;
 import com.jonas.pay.repository.dto.order.PayOrderRespDTO;
 import com.jonas.pay.repository.dto.order.PayOrderUnifiedReqDTO;
@@ -12,7 +13,6 @@ import com.jonas.pay.repository.dto.transfer.PayTransferRespDTO;
 import com.jonas.pay.repository.dto.transfer.PayTransferUnifiedReqDTO;
 import com.jonas.pay.util.GsonUtil;
 import com.jonas.pay.util.ValidationUtil;
-import com.wechat.pay.java.core.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;

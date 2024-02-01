@@ -2,9 +2,12 @@ package com.jonas.pay.service;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
+import com.jonas.pay.channel.PayClient;
 import com.jonas.pay.channel.PayClientConfig;
+import com.jonas.pay.channel.PayClientFactory;
 import com.jonas.pay.config.response.BizException;
 import com.jonas.pay.config.response.ErrorCode;
+import com.jonas.pay.constant.CommonStatusEnum;
 import com.jonas.pay.constant.channel.PayChannelEnum;
 import com.jonas.pay.domain.PayChannelDomain;
 import com.jonas.pay.repository.convert.channel.PayChannelConvert;
@@ -33,6 +36,7 @@ public class PayChannelService {
 
     private final Validator validator;
     private final PayChannelDomain payChannelDomain;
+    private final PayClientFactory payClientFactory;
 
     public Long createPayChannel(PayChannelCreateQo qo) {
         // 断言是否有重复的
@@ -63,7 +67,7 @@ public class PayChannelService {
         PayClientConfig config = GsonUtil.toBean(configStr, payClass);
         Assert.notNull(config);
 
-        // 验证参数
+        // todo 验证参数
         config.validate(validator);
         return config;
     }
@@ -87,5 +91,34 @@ public class PayChannelService {
             return Collections.emptyList();
         }
         return payChannelDomain.listByAppId(appId);
+    }
+
+    /**
+     * 获得指定编号的支付客户端
+     *
+     * @param channelId 编号
+     * @return 支付客户端
+     */
+    public PayClient getPayClient(Long channelId) {
+        PayChannelEntity channel = payChannelDomain.getChannel(channelId);
+        if (null != channel) {
+            payClientFactory.createOrUpdatePayClient(channel.getChannelId(), channel.getCode(), channel.getConfig());
+        }
+        return payClientFactory.getPayClient(channelId);
+    }
+
+    public PayChannelEntity validPayChannel(Long appId, String code) {
+        PayChannelEntity channel = payChannelDomain.getChannelByAppIdAndCode(appId, code);
+        validPayChannel(channel);
+        return channel;
+    }
+
+    private void validPayChannel(PayChannelEntity channel) {
+        if (channel == null) {
+            throw new BizException(ErrorCode.CHANNEL_ERROR2);
+        }
+        if (CommonStatusEnum.DISABLE.getStatus().equals(channel.getStatus())) {
+            throw new BizException(ErrorCode.CHANNEL_ERROR3);
+        }
     }
 }

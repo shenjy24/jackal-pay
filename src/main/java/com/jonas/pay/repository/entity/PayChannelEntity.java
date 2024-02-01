@@ -8,7 +8,6 @@ import com.jonas.pay.channel.PayClientConfig;
 import com.jonas.pay.constant.CommonStatusEnum;
 import com.jonas.pay.constant.channel.PayChannelEnum;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 支付渠道实体
@@ -19,7 +18,6 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @TableName("pay_channel")
-@EqualsAndHashCode(callSuper = true)
 public class PayChannelEntity extends BaseEntity {
     /**
      * 渠道编号

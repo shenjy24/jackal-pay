@@ -17,7 +17,7 @@ import com.alipay.api.response.*;
 import com.jonas.pay.channel.AbstractPayClient;
 import com.jonas.pay.config.response.BizException;
 import com.jonas.pay.config.response.ErrorCode;
-import com.jonas.pay.constant.order.PayOrderStatusRespEnum;
+import com.jonas.pay.constant.order.PayOrderStatusEnum;
 import com.jonas.pay.constant.transfer.PayTransferTypeEnum;
 import com.jonas.pay.repository.dto.order.PayOrderRespDTO;
 import com.jonas.pay.repository.dto.order.PayOrderUnifiedReqDTO;
@@ -89,7 +89,7 @@ public abstract class AbstractAlipayPayClient extends AbstractPayClient<AlipayPa
         Integer status = parseStatus(bodyObj.get("trade_status"));
         // 特殊逻辑: 支付宝没有退款成功的状态，所以，如果有退款金额，我们认为是退款成功
         if (MapUtil.getDouble(bodyObj, "refund_fee", 0D) > 0) {
-            status = PayOrderStatusRespEnum.REFUND.getStatus();
+            status = PayOrderStatusEnum.REFUND.getStatus();
         }
         Assert.notNull(status, (Supplier<Throwable>) () -> {
             throw new IllegalArgumentException(StrUtil.format("body({}) 的 trade_status 不正确", body));
@@ -127,9 +127,9 @@ public abstract class AbstractAlipayPayClient extends AbstractPayClient<AlipayPa
     }
 
     private static Integer parseStatus(String tradeStatus) {
-        return Objects.equals("WAIT_BUYER_PAY", tradeStatus) ? PayOrderStatusRespEnum.WAITING.getStatus()
-                : ObjectUtil.equalsAny(tradeStatus, "TRADE_FINISHED", "TRADE_SUCCESS") ? PayOrderStatusRespEnum.SUCCESS.getStatus()
-                : Objects.equals("TRADE_CLOSED", tradeStatus) ? PayOrderStatusRespEnum.CLOSED.getStatus() : null;
+        return Objects.equals("WAIT_BUYER_PAY", tradeStatus) ? PayOrderStatusEnum.WAITING.getStatus()
+                : ObjectUtil.equalsAny(tradeStatus, "TRADE_FINISHED", "TRADE_SUCCESS") ? PayOrderStatusEnum.SUCCESS.getStatus()
+                : Objects.equals("TRADE_CLOSED", tradeStatus) ? PayOrderStatusEnum.CLOSED.getStatus() : null;
     }
 
     // ============ 退款相关 ==========

@@ -17,7 +17,7 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import com.jonas.pay.channel.AbstractPayClient;
-import com.jonas.pay.constant.order.PayOrderStatusRespEnum;
+import com.jonas.pay.constant.order.PayOrderStatusEnum;
 import com.jonas.pay.constant.transfer.PayTransferTypeEnum;
 import com.jonas.pay.repository.dto.order.PayOrderRespDTO;
 import com.jonas.pay.repository.dto.order.PayOrderUnifiedReqDTO;
@@ -169,7 +169,7 @@ public abstract class AbstractWxPayClient extends AbstractPayClient<WxPayClientC
         // 2. 构建结果
         // V2 微信支付的回调，只有 SUCCESS 支付成功、CLOSED 支付失败两种情况，无需像支付宝一样解析的比较复杂
         Integer status = Objects.equals(response.getResultCode(), "SUCCESS") ?
-                PayOrderStatusRespEnum.SUCCESS.getStatus() : PayOrderStatusRespEnum.CLOSED.getStatus();
+                PayOrderStatusEnum.SUCCESS.getStatus() : PayOrderStatusEnum.CLOSED.getStatus();
         return PayOrderRespDTO.of(status, response.getTransactionId(), response.getOpenid(), parseDateV2(response.getTimeEnd()),
                 response.getOutTradeNo(), body);
     }
@@ -238,15 +238,15 @@ public abstract class AbstractWxPayClient extends AbstractPayClient<WxPayClientC
         switch (tradeState) {
             case "NOTPAY":
             case "USERPAYING": // 支付中，等待用户输入密码（条码支付独有）
-                return PayOrderStatusRespEnum.WAITING.getStatus();
+                return PayOrderStatusEnum.WAITING.getStatus();
             case "SUCCESS":
-                return PayOrderStatusRespEnum.SUCCESS.getStatus();
+                return PayOrderStatusEnum.SUCCESS.getStatus();
             case "REFUND":
-                return PayOrderStatusRespEnum.REFUND.getStatus();
+                return PayOrderStatusEnum.REFUND.getStatus();
             case "CLOSED":
             case "REVOKED": // 已撤销（刷卡支付独有）
             case "PAYERROR": // 支付失败（其它原因，如银行返回失败）
-                return PayOrderStatusRespEnum.CLOSED.getStatus();
+                return PayOrderStatusEnum.CLOSED.getStatus();
             default:
                 throw new IllegalArgumentException(StrUtil.format("未知的支付状态({})", tradeState));
         }

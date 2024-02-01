@@ -19,4 +19,11 @@ public class PayAppDomain {
     public void savePayApp(PayAppEntity entity) {
         payAppMapper.insert(entity);
     }
+
+    public PayAppEntity getPayApp(Long appId) {
+        if (null == appId) {
+            return null;
+        }
+        return payAppMapper.selectById(appId);
+    }
 }

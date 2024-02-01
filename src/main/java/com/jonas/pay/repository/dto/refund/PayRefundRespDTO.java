@@ -1,6 +1,6 @@
 package com.jonas.pay.repository.dto.refund;
 
-import com.jonas.pay.constant.refund.PayRefundStatusRespEnum;
+import com.jonas.pay.constant.refund.PayRefundStatusEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -16,7 +16,7 @@ public class PayRefundRespDTO {
     /**
      * 退款状态
      *
-     * 枚举 {@link PayRefundStatusRespEnum}
+     * 枚举 {@link PayRefundStatusEnum}
      */
     private Integer status;
 
@@ -64,7 +64,7 @@ public class PayRefundRespDTO {
     public static PayRefundRespDTO waitingOf(String channelRefundNo,
                                              String outRefundNo, Object rawData) {
         PayRefundRespDTO respDTO = new PayRefundRespDTO();
-        respDTO.status = PayRefundStatusRespEnum.WAITING.getStatus();
+        respDTO.status = PayRefundStatusEnum.WAITING.getStatus();
         respDTO.channelRefundNo = channelRefundNo;
         // 相对通用的字段
         respDTO.outRefundNo = outRefundNo;
@@ -78,7 +78,7 @@ public class PayRefundRespDTO {
     public static PayRefundRespDTO successOf(String channelRefundNo, LocalDateTime successTime,
                                              String outRefundNo, Object rawData) {
         PayRefundRespDTO respDTO = new PayRefundRespDTO();
-        respDTO.status = PayRefundStatusRespEnum.SUCCESS.getStatus();
+        respDTO.status = PayRefundStatusEnum.SUCCESS.getStatus();
         respDTO.channelRefundNo = channelRefundNo;
         respDTO.successTime = successTime;
         // 相对通用的字段
@@ -101,7 +101,7 @@ public class PayRefundRespDTO {
     public static PayRefundRespDTO failureOf(String channelErrorCode, String channelErrorMsg,
                                              String outRefundNo, Object rawData) {
         PayRefundRespDTO respDTO = new PayRefundRespDTO();
-        respDTO.status = PayRefundStatusRespEnum.FAILURE.getStatus();
+        respDTO.status = PayRefundStatusEnum.FAILURE.getStatus();
         respDTO.channelErrorCode = channelErrorCode;
         respDTO.channelErrorMsg = channelErrorMsg;
         // 相对通用的字段

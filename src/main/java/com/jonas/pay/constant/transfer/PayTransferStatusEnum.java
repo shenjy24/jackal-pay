@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 @Getter
 @AllArgsConstructor
-public enum PayTransferStatusRespEnum {
+public enum PayTransferStatusEnum {
 
     WAITING(0, "等待转账"),
 

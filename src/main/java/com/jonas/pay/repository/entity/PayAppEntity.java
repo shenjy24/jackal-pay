@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.jonas.pay.constant.CommonStatusEnum;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 支付应用实体
@@ -15,7 +14,6 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @TableName("pay_app")
-@EqualsAndHashCode(callSuper = true)
 public class PayAppEntity extends BaseEntity {
     /**
      * 应用编号

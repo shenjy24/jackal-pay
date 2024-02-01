@@ -11,7 +11,7 @@ import java.io.Serializable;
  * 通用返回结构
  *
  * @author shenjy
- * @time  2020/8/13
+ * @time 2020/8/13
  */
 @Getter
 @Setter
@@ -38,8 +38,8 @@ public class JsonResult<T> implements Serializable {
     }
 
     public JsonResult(String code, String message, T data) {
-        this.code = code ;
-        this.message =message ;
+        this.code = code;
+        this.message = message;
         this.data = data;
     }
 
@@ -53,6 +53,10 @@ public class JsonResult<T> implements Serializable {
         result.setData(data);
         result.setMessage(msg);
         return result;
+    }
+
+    public static boolean isSuccess(String code) {
+        return SystemCode.SUCCESS.getCode().equals(code);
     }
 
     @Override

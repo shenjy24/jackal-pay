@@ -26,3 +26,8 @@ mybatis-plus:
       id-type: ASSIGN_ID # 分配 ID，默认使用雪花算法。
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+
+# 支付配置信息
+pay:
+  order-notify-url: http://localhost:8081/api/pay/order/notify
+  refund-notify-url: http://localhost:8081/api/pay/refund/notify
