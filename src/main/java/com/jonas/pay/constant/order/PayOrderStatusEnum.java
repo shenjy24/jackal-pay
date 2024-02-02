@@ -1,5 +1,6 @@
 package com.jonas.pay.constant.order;
 
+import com.jonas.pay.util.ObjectUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -53,4 +54,13 @@ public enum PayOrderStatusEnum {
         return Objects.equals(status, CLOSED.getStatus());
     }
 
+    /**
+     * 判断是否支付成功或者已退款
+     *
+     * @param status 状态
+     * @return 是否支付成功或者已退款
+     */
+    public static boolean isSuccessOrRefund(Integer status) {
+        return ObjectUtil.equalsAny(status, SUCCESS.getStatus(), REFUND.getStatus());
+    }
 }

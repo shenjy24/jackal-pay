@@ -113,6 +113,12 @@ public class PayChannelService {
         return channel;
     }
 
+    public PayChannelEntity validPayChannel(Long id) {
+        PayChannelEntity channel = payChannelDomain.getChannel(id);
+        validPayChannel(channel);
+        return channel;
+    }
+
     private void validPayChannel(PayChannelEntity channel) {
         if (channel == null) {
             throw new BizException(ErrorCode.CHANNEL_ERROR2);

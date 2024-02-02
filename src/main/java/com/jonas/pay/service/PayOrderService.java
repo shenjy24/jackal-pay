@@ -51,7 +51,7 @@ public class PayOrderService {
     private final PayNotifyService payNotifyService;
 
     public PayOrderSubmitVo submitOrder(PayOrderSubmitQo qo, String userIp) {
-        // 1.1 获得 PayOrderDO ，并校验其是否存在
+        // 1.1 获得 PayOrder ，并校验其是否存在
         PayOrderEntity order = validateOrderCanSubmit(qo.getExtensionId());
         // 1.2 校验支付渠道是否有效
         PayChannelEntity channel = validateChannelCanSubmit(order.getAppId(), qo.getChannelCode());
@@ -88,6 +88,13 @@ public class PayOrderService {
             order = payOrderDomain.getPayOrderById(order.getPayOrderId());
         }
         return PayOrderConvert.INSTANCE.convert(order, unifiedOrderResp);
+    }
+
+    public void notifyOrder(Long channelId, PayOrderRespDTO notify) {
+        // 校验支付渠道是否有效
+        PayChannelEntity channel = payChannelService.validPayChannel(channelId);
+        // 更新支付订单为已支付
+        getSelf().notifyOrder(channel, notify);
     }
 
     /**
@@ -318,5 +325,33 @@ public class PayOrderService {
      */
     private PayOrderService getSelf() {
         return SpringUtil.getBean(getClass());
+    }
+
+    /**
+     * 更新支付订单的退款金额
+     *
+     * @param orderId     编号
+     * @param refundPrice 增加的退款金额
+     */
+    public void updateOrderRefundPrice(Long orderId, Integer incrRefundPrice) {
+        PayOrderEntity order = payOrderDomain.getPayOrderById(orderId);
+        if (order == null) {
+            throw new BizException(ErrorCode.ORDER_ERROR1);
+        }
+        if (!PayOrderStatusEnum.isSuccessOrRefund(order.getStatus())) {
+            throw new BizException(ErrorCode.REFUND_ERROR4);
+        }
+        if (order.getRefundPrice() + incrRefundPrice > order.getPrice()) {
+            throw new BizException(ErrorCode.REFUND_ERROR3);
+        }
+
+        // 更新订单
+        PayOrderEntity updateObj = new PayOrderEntity()
+                .setRefundPrice(order.getRefundPrice() + incrRefundPrice)
+                .setStatus(PayOrderStatusEnum.REFUND.getStatus());
+        int updateCount = payOrderDomain.updatePayOrderByIdAndStatus(orderId, order.getStatus(), updateObj);
+        if (updateCount == 0) {
+            throw new BizException(ErrorCode.REFUND_ERROR4);
+        }
     }
 }
