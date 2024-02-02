@@ -41,7 +41,7 @@ public class PayNotifyDomain {
     }
 
     public void updateNotifyTaskById(PayNotifyTaskEntity task) {
-        if (null == task || null == task.getNotifyTaskId()) {
+        if (null == task || null == task.getTaskId()) {
             return;
         }
         notifyTaskMapper.updateById(task);

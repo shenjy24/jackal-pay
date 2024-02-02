@@ -104,11 +104,11 @@ public class PayNotifyService {
      */
     public void executeNotify(PayNotifyTaskEntity task) {
         // 分布式锁，避免并发问题
-        notifyLockRedisDAO.lock(task.getNotifyTaskId(), NOTIFY_TIMEOUT_MILLIS, () -> {
+        notifyLockRedisDAO.lock(task.getTaskId(), NOTIFY_TIMEOUT_MILLIS, () -> {
             // 校验，当前任务是否已经被通知过
             // 虽然已经通过分布式加锁，但是可能同时满足通知的条件，然后都去获得锁。此时，第一个执行完后，第二个还是能拿到锁，然后会再执行一次。
             // 因此，此处我们通过第 notifyTimes 通知次数是否匹配来判断
-            PayNotifyTaskEntity dbTask = notifyDomain.getNotifyTask(task.getNotifyTaskId());
+            PayNotifyTaskEntity dbTask = notifyDomain.getNotifyTask(task.getTaskId());
             if (ObjectUtil.notEqual(task.getNotifyTimes(), dbTask.getNotifyTimes())) {
                 log.warn("[executeNotifySync][task({}) 任务被忽略，原因是它的通知不是第 ({}) 次，可能是因为并发执行了]",
                         GsonUtil.toJson(task), dbTask.getNotifyTimes());
@@ -137,7 +137,7 @@ public class PayNotifyService {
         // 记录 PayNotifyLog 日志
         String response = invokeException != null ? ExceptionUtil.getRootCauseMessage(invokeException) :
                 GsonUtil.toJson(invokeResult);
-        notifyDomain.saveNotifyLog(new PayNotifyLogEntity().setTaskId(task.getNotifyTaskId())
+        notifyDomain.saveNotifyLog(new PayNotifyLogEntity().setTaskId(task.getTaskId())
                 .setNotifyTimes(task.getNotifyTimes() + 1)
                 .setStatus(newStatus)
                 .setResponse(response));
@@ -155,7 +155,7 @@ public class PayNotifyService {
     Integer processNotifyResult(PayNotifyTaskEntity task, JsonResult<?> invokeResult, Throwable invokeException) {
         // 设置通用的更新 PayNotifyTaskDO 的字段
         PayNotifyTaskEntity updateTask = new PayNotifyTaskEntity()
-                .setNotifyTaskId(task.getNotifyTaskId())
+                .setTaskId(task.getTaskId())
                 .setLastExecuteTime(LocalDateTime.now())
                 .setNotifyTimes(task.getNotifyTimes() + 1);
 

@@ -21,7 +21,7 @@ public class PayNotifyLogEntity extends BaseEntity {
     /**
      * 通知任务编号
      * <p>
-     * 关联 {@link PayNotifyTaskEntity#getNotifyTaskId()}
+     * 关联 {@link PayNotifyTaskEntity#getTaskId()}
      */
     private Long taskId;
     /**

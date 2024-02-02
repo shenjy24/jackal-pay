@@ -20,7 +20,7 @@ public interface PayOrderConvert {
 
     PayOrderConvert INSTANCE = Mappers.getMapper(PayOrderConvert.class);
 
-    @Mapping(target = "extensionId", ignore = true)
+    @Mapping(target = "orderExtensionId", ignore = true)
     PayOrderExtensionEntity convert(PayOrderSubmitQo bean, String userIp);
 
     @Mapping(source = "order.status", target = "status")

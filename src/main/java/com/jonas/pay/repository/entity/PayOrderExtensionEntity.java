@@ -23,7 +23,7 @@ public class PayOrderExtensionEntity extends BaseEntity {
     /**
      * 订单拓展编号，数据库自增
      */
-    private Long extensionId;
+    private Long orderExtensionId;
     /**
      * 外部订单号，根据规则生成
      * <p>
@@ -39,7 +39,7 @@ public class PayOrderExtensionEntity extends BaseEntity {
      * <p>
      * 关联 {@link PayOrderEntity#getPayOrderId()}
      */
-    private Long orderId;
+    private Long payOrderId;
     /**
      * 渠道编号
      * <p>

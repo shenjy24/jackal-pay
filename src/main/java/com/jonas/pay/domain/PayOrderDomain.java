@@ -38,7 +38,7 @@ public class PayOrderDomain {
             return Collections.emptyList();
         }
         return new LambdaQueryChainWrapper<>(payOrderExtensionMapper)
-                .eq(PayOrderExtensionEntity::getOrderId, id)
+                .eq(PayOrderExtensionEntity::getPayOrderId, id)
                 .list();
     }
 
@@ -60,7 +60,7 @@ public class PayOrderDomain {
 
     public int updatePayOrderExtensionByIdAndStatus(Long payOrderExtensionId, Integer status, PayOrderExtensionEntity update) {
         return payOrderExtensionMapper.update(update, new LambdaQueryWrapper<PayOrderExtensionEntity>()
-                .eq(PayOrderExtensionEntity::getExtensionId, payOrderExtensionId)
+                .eq(PayOrderExtensionEntity::getOrderExtensionId, payOrderExtensionId)
                 .eq(PayOrderExtensionEntity::getStatus, status));
     }
 

@@ -60,7 +60,7 @@ public class PayOrderService {
         // 2. 插入 PayOrderExtensionEntity
         String no = noRedisDAO.generate(payProperties.getOrderNoPrefix());
         PayOrderExtensionEntity orderExtension = PayOrderConvert.INSTANCE.convert(qo, userIp)
-                .setOrderId(order.getPayOrderId()).setOutTradeNo(no).setChannelId(channel.getChannelId())
+                .setPayOrderId(order.getPayOrderId()).setOutTradeNo(no).setChannelId(channel.getChannelId())
                 .setChannelCode(channel.getCode()).setStatus(PayOrderStatusEnum.WAITING.getStatus());
         payOrderDomain.savePayOrderExtension(orderExtension);
 
@@ -128,7 +128,7 @@ public class PayOrderService {
         }
 
         // 3. 插入支付通知记录
-        payNotifyService.createPayNotifyTask(PayNotifyTypeEnum.ORDER.getType(), orderExtension.getOrderId());
+        payNotifyService.createPayNotifyTask(PayNotifyTypeEnum.ORDER.getType(), orderExtension.getPayOrderId());
     }
 
     /**
@@ -144,7 +144,7 @@ public class PayOrderService {
             throw new BizException(ErrorCode.CHANNEL_ERROR1);
         }
         if (PayOrderStatusEnum.isSuccess(orderExtension.getStatus())) { // 如果已经是成功，直接返回，不用重复更新
-            log.info("[updateOrderExtensionSuccess][orderExtension({}) 已经是已支付，无需更新]", orderExtension.getExtensionId());
+            log.info("[updateOrderExtensionSuccess][orderExtension({}) 已经是已支付，无需更新]", orderExtension.getOrderExtensionId());
             return orderExtension;
         }
         if (ObjectUtil.notEqual(orderExtension.getStatus(), PayOrderStatusEnum.WAITING.getStatus())) { // 校验状态，必须是待支付
@@ -160,7 +160,7 @@ public class PayOrderService {
         if (updateCounts == 0) { // 校验状态，必须是待支付
             throw new BizException(ErrorCode.ORDER_ERROR7);
         }
-        log.info("[updateOrderExtensionSuccess][orderExtension({}) 更新为已支付]", orderExtension.getExtensionId());
+        log.info("[updateOrderExtensionSuccess][orderExtension({}) 更新为已支付]", orderExtension.getOrderExtensionId());
         return orderExtension;
     }
 
@@ -175,12 +175,12 @@ public class PayOrderService {
     private Boolean updateOrderSuccess(PayChannelEntity channel, PayOrderExtensionEntity orderExtension,
                                        PayOrderRespDTO notify) {
         // 1. 判断 PayOrderDO 是否处于待支付
-        PayOrderEntity order = payOrderDomain.getPayOrderById(orderExtension.getOrderId());
+        PayOrderEntity order = payOrderDomain.getPayOrderById(orderExtension.getPayOrderId());
         if (order == null) {
             throw new BizException(ErrorCode.ORDER_ERROR1);
         }
         if (PayOrderStatusEnum.isSuccess(order.getStatus()) // 如果已经是成功，直接返回，不用重复更新
-                && Objects.equals(order.getExtensionId(), orderExtension.getExtensionId())) {
+                && Objects.equals(order.getOrderExtensionId(), orderExtension.getOrderExtensionId())) {
             log.info("[updateOrderExtensionSuccess][order({}) 已经是已支付，无需更新]", order.getPayOrderId());
             return true;
         }
@@ -194,7 +194,7 @@ public class PayOrderService {
                         .setChannelId(channel.getChannelId())
                         .setChannelCode(channel.getCode())
                         .setSuccessTime(notify.getSuccessTime())
-                        .setExtensionId(orderExtension.getExtensionId())
+                        .setOrderExtensionId(orderExtension.getOrderExtensionId())
                         .setOutTradeNo(orderExtension.getOutTradeNo())
                         .setChannelOrderNo(notify.getChannelOrderNo())
                         .setChannelUserId(notify.getChannelUserId())
@@ -219,12 +219,12 @@ public class PayOrderService {
             throw new BizException(ErrorCode.ORDER_ERROR6);
         }
         if (PayOrderStatusEnum.isClosed(orderExtension.getStatus())) { // 如果已经是关闭，直接返回，不用重复更新
-            log.info("[updateOrderExtensionClosed][orderExtension({}) 已经是支付关闭，无需更新]", orderExtension.getExtensionId());
+            log.info("[updateOrderExtensionClosed][orderExtension({}) 已经是支付关闭，无需更新]", orderExtension.getOrderExtensionId());
             return;
         }
         // 一般出现先是支付成功，然后支付关闭，都是全部退款导致关闭的场景。这个情况，我们不更新支付拓展单，只通过退款流程，更新支付单
         if (PayOrderStatusEnum.isSuccess(orderExtension.getStatus())) {
-            log.info("[updateOrderExtensionClosed][orderExtension({}) 是已支付，无需更新为支付关闭]", orderExtension.getExtensionId());
+            log.info("[updateOrderExtensionClosed][orderExtension({}) 是已支付，无需更新为支付关闭]", orderExtension.getOrderExtensionId());
             return;
         }
         if (ObjectUtil.notEqual(orderExtension.getStatus(), PayOrderStatusEnum.WAITING.getStatus())) { // 校验状态，必须是待支付
@@ -232,7 +232,7 @@ public class PayOrderService {
         }
 
         // 2. 更新 PayOrderExtensionDO
-        int updateCounts = payOrderDomain.updatePayOrderExtensionByIdAndStatus(orderExtension.getExtensionId(),
+        int updateCounts = payOrderDomain.updatePayOrderExtensionByIdAndStatus(orderExtension.getOrderExtensionId(),
                 orderExtension.getStatus(),
                 new PayOrderExtensionEntity()
                         .setStatus(PayOrderStatusEnum.CLOSED.getStatus())
@@ -242,7 +242,7 @@ public class PayOrderService {
         if (updateCounts == 0) { // 校验状态，必须是待支付
             throw new BizException(ErrorCode.ORDER_ERROR7);
         }
-        log.info("[updateOrderExtensionClosed][orderExtension({}) 更新为支付关闭]", orderExtension.getExtensionId());
+        log.info("[updateOrderExtensionClosed][orderExtension({}) 更新为支付关闭]", orderExtension.getOrderExtensionId());
     }
 
     private PayOrderEntity validateOrderCanSubmit(Long id) {
@@ -277,7 +277,7 @@ public class PayOrderService {
             // 情况一：校验数据库中的 orderExtension 是不是已支付
             if (PayOrderStatusEnum.isSuccess(orderExtension.getStatus())) {
                 log.warn("[validateOrderCanSubmit][order({}) 的 extension({}) 已支付，可能是数据不一致]",
-                        id, orderExtension.getExtensionId());
+                        id, orderExtension.getOrderExtensionId());
                 throw new BizException(ErrorCode.ORDER_ERROR5);
             }
             // 情况二：调用三方接口，查询支付单状态，是不是已支付

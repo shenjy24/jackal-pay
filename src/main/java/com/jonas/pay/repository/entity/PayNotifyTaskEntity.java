@@ -32,7 +32,7 @@ public class PayNotifyTaskEntity extends BaseEntity {
      * 编号，自增
      */
     @TableId
-    private Long notifyTaskId;
+    private Long taskId;
     /**
      * 应用编号
      * <p>

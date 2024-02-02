@@ -100,9 +100,9 @@ public class PayOrderEntity extends BaseEntity {
     /**
      * 支付成功的订单拓展单编号
      * <p>
-     * 关联 {@link PayOrderExtensionEntity#getExtensionId()}
+     * 关联 {@link PayOrderExtensionEntity#getOrderExtensionId()}
      */
-    private Long extensionId;
+    private Long orderExtensionId;
     /**
      * 支付成功的外部订单号
      * <p>

@@ -92,7 +92,7 @@ public class PayRefundService {
         log.info("[notifyRefundSuccess][退款订单({}) 更新为退款成功]", refund.getRefundId());
 
         // 2. 更新订单
-        orderService.updateOrderRefundPrice(refund.getOrderId(), refund.getRefundPrice());
+        orderService.updateOrderRefundPrice(refund.getPayOrderId(), refund.getRefundPrice());
 
         // 3. 插入退款通知记录
         notifyService.createPayNotifyTask(PayNotifyTypeEnum.REFUND.getType(), refund.getRefundId());

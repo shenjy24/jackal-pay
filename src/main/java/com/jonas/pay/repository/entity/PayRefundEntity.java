@@ -58,7 +58,7 @@ public class PayRefundEntity extends BaseEntity {
      * <p>
      * 关联 {@link PayOrderEntity#getPayOrderId()}
      */
-    private Long orderId;
+    private Long payOrderId;
     /**
      * 支付订单编号
      * <p>
