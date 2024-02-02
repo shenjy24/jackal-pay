@@ -6,7 +6,7 @@ spring:
     name: "pay-server"
   datasource:
     url: jdbc:mysql://8.134.206.112:3306/pay?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Hongkong&allowPublicKeyRetrieval=true
-    username: jia
+    username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
