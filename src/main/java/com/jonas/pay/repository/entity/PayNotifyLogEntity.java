@@ -1,5 +1,6 @@
 package com.jonas.pay.repository.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.jonas.pay.constant.notify.PayNotifyStatusEnum;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class PayNotifyLogEntity extends BaseEntity {
     /**
      * 日志编号，自增
      */
+    @TableId
     private Long notifyLogId;
     /**
      * 通知任务编号

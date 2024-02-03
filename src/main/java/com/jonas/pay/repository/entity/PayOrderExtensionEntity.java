@@ -1,6 +1,7 @@
 package com.jonas.pay.repository.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.jonas.pay.constant.order.PayOrderStatusEnum;
@@ -23,6 +24,7 @@ public class PayOrderExtensionEntity extends BaseEntity {
     /**
      * 订单拓展编号，数据库自增
      */
+    @TableId
     private Long orderExtensionId;
     /**
      * 外部订单号，根据规则生成

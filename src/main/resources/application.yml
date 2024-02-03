@@ -12,6 +12,16 @@ spring:
     hikari:
       minimum-idle: 1
       maximum-pool-size: 10
+  redis:
+    redisson:
+      config: |
+        singleServerConfig:
+          address: redis://8.134.206.112:6379
+          database: 0
+          password: 123456
+        threads: 0
+        nettyThreads: 0
+        transportMode: "NIO"
   servlet:
     multipart:
       max-file-size: 50MB

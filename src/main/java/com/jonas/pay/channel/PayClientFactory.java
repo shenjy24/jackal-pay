@@ -7,6 +7,7 @@ import com.jonas.pay.channel.mock.MockPayClient;
 import com.jonas.pay.channel.wechat.*;
 import com.jonas.pay.constant.channel.PayChannelEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,9 +18,10 @@ import static com.jonas.pay.constant.channel.PayChannelEnum.*;
 /**
  * 支付客户端的工厂实现类
  *
- * @author 芋道源码
+ * @author shenjy
  */
 @Slf4j
+@Component
 public class PayClientFactory {
 
     /**
